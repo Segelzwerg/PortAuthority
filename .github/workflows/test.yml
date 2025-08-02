@@ -1,0 +1,167 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ '3.11', '3.12', '3.13' ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: |
+          poetry install --no-interaction --no-root
+          poetry add --group dev black flake8 coverage pytest-cov pytest-django
+
+      - name: Install project
+        run: poetry install --no-interaction
+
+      - name: Lint with Black
+        run: |
+          poetry run black --check --diff .
+
+      - name: Lint with Flake8
+        run: |
+          poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+
+      - name: Run Django system checks
+        run: |
+          poetry run python manage.py check --deploy
+
+      - name: Run migrations check
+        run: |
+          poetry run python manage.py makemigrations --check --dry-run
+
+      - name: Run tests with coverage
+        env:
+          DJANGO_SETTINGS_MODULE: portauthority.settings
+        run: |
+          poetry run coverage run --source='.' manage.py test
+          poetry run coverage report --show-missing
+          poetry run coverage xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+
+      - name: Generate coverage badge
+        if: matrix.python-version == '3.13' && github.ref == 'refs/heads/main'
+        run: |
+          poetry run coverage-badge -o coverage.svg
+
+      - name: Upload coverage badge
+        if: matrix.python-version == '3.13' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-badge
+          path: coverage.svg
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install dependencies
+        run: |
+          poetry install --no-interaction
+          poetry add --group dev safety bandit
+
+      - name: Run safety check
+        run: |
+          poetry run safety check
+
+      - name: Run bandit security scan
+        run: |
+          poetry run bandit -r . -x .venv,venv,env
+
+  deploy-ready:
+    runs-on: ubuntu-latest
+    needs: [ lint-and-test, security-scan ]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install dependencies
+        run: poetry install --no-interaction
+
+      - name: Collect static files
+        env:
+          DJANGO_SETTINGS_MODULE: portauthority.settings
+          SECRET_KEY: 'github-actions-secret-key-for-testing'
+          DEBUG: 'False'
+        run: |
+          poetry run python manage.py collectstatic --noinput
+
+      - name: Create deployment artifact
+        run: |
+          tar -czf deployment.tar.gz \
+            --exclude='.git' \
+            --exclude='.venv' \
+            --exclude='__pycache__' \
+            --exclude='*.pyc' \
+            --exclude='.pytest_cache' \
+            --exclude='coverage.xml' \
+            --exclude='htmlcov' \
+            .
+
+      - name: Upload deployment artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-package
+          path: deployment.tar.gz
