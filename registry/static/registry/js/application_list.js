@@ -7,34 +7,50 @@
 const PortAuthority = {
 
     /**
-     * Opens an application in a new window
+     * Opens an application in a new tab
      * @param {string} fullAddress - The complete URL to open
      * @param {string} displayName - Display name for notifications
      */
     openApplication: function (fullAddress, displayName) {
         try {
-            // Open in new window with specific dimensions and features
-            const newWindow = window.open(
-                fullAddress,
-                '_blank',
-                'width=1200,height=800,scrollbars=yes,resizable=yes,toolbar=yes,menubar=yes,location=yes'
-            );
+            // Validate URL before opening
+            if (!this.isValidUrl(fullAddress)) {
+                this.showNotification('Invalid URL format', 'error');
+                return;
+            }
 
-            // Focus the new window if it was successfully opened
-            if (newWindow) {
-                newWindow.focus();
+            // Open in new tab (using _blank target without window features)
+            const newTab = window.open(fullAddress, '_blank');
+
+            // Focus the new tab if it was successfully opened
+            if (newTab) {
+                newTab.focus();
 
                 // Show success notification
                 this.showNotification(`Opening ${displayName}...`, 'success');
             } else {
                 // Fallback if popup was blocked
                 this.showNotification('Pop-up blocked. Please allow pop-ups for this site.', 'warning');
-                // Try opening in current tab as fallback
-                window.open(fullAddress, '_blank');
             }
         } catch (error) {
             console.error('Error opening application:', error);
             this.showNotification('Error opening application. Please try again.', 'error');
+        }
+    },
+
+    /**
+     * Validates if a URL is safe to open
+     * @param {string} url - URL to validate
+     * @return {boolean} - Whether URL is safe
+     */
+    isValidUrl: function (url) {
+        try {
+            const urlObj = new URL(url);
+            // Only allow http and https protocols
+            return ['http:', 'https:'].includes(urlObj.protocol);
+        } catch (error) {
+            console.error('Invalid URL:', error);
+            return false;
         }
     },
 
@@ -285,84 +301,20 @@ const PortAuthority = {
     /**
      * Sets loading state for a button
      * @param {HTMLElement} button - Button element
-     * @param {boolean} loading - Whether button should be in loading state
+     * @param {boolean} isLoading - Whether button is in loading state
      */
-    setButtonLoading: function (button, loading) {
-        if (loading) {
-            button.style.opacity = '0.7';
-            button.style.cursor = 'wait';
-            const icon = button.querySelector('.btn-icon');
-            if (icon) {
-                icon.style.animation = 'pulse 1s infinite';
-            }
+    setButtonLoading: function (button, isLoading) {
+        if (isLoading) {
+            button.classList.add('loading');
+            button.disabled = true;
         } else {
-            button.style.opacity = '';
-            button.style.cursor = '';
-            const icon = button.querySelector('.btn-icon');
-            if (icon) {
-                icon.style.animation = '';
-            }
+            button.classList.remove('loading');
+            button.disabled = false;
         }
-    },
-
-    /**
-     * Validates if a URL is safe to open
-     * @param {string} url - URL to validate
-     * @return {boolean} - Whether URL is safe
-     */
-    isValidUrl: function (url) {
-        try {
-            const urlObj = new URL(url);
-            // Only allow http and https protocols
-            return ['http:', 'https:'].includes(urlObj.protocol);
-        } catch (error) {
-            console.error('Invalid URL:', error);
-            return false;
-        }
-    },
-
-    /**
-     * Gets application statistics
-     * @return {Object} - Statistics object
-     */
-    getApplicationStats: function () {
-        const cards = document.querySelectorAll('.application-card');
-        const protocols = {};
-
-        cards.forEach(card => {
-            const badge = card.querySelector('.protocol-badge');
-            if (badge) {
-                const protocol = badge.textContent.trim().toLowerCase();
-                protocols[protocol] = (protocols[protocol] || 0) + 1;
-            }
-        });
-
-        return {
-            total: cards.length,
-            protocols: protocols
-        };
-    },
-
-    /**
-     * Initializes the application
-     */
-    init: function () {
-        // Wait for DOM to be ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                this.initializeEventListeners();
-            });
-        } else {
-            this.initializeEventListeners();
-        }
-
-        // Log initialization
-        console.log('Port Authority Application Registry initialized');
-        console.log('Statistics:', this.getApplicationStats());
     }
 };
 
-// Global functions for backward compatibility and template usage
+// Global function wrappers for template compatibility
 function openApplication(fullAddress, displayName) {
     PortAuthority.openApplication(fullAddress, displayName);
 }
@@ -371,8 +323,18 @@ function copyToClipboard(text) {
     PortAuthority.copyToClipboard(text);
 }
 
-// Initialize when script loads
-PortAuthority.init();
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function () {
+    PortAuthority.initializeEventListeners();
 
-// Expose PortAuthority to global scope for debugging
-window.PortAuthority = PortAuthority;
+    // Show welcome message for empty state
+    const noAppsMessage = document.querySelector('.no-applications');
+    if (noAppsMessage) {
+        PortAuthority.showNotification('No applications registered yet. Add some to get started!', 'info');
+    }
+});
+
+// Export for module systems (if needed)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = PortAuthority;
+}
