@@ -1,0 +1,382 @@
+/* Port Authority Application Registry Styles */
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styles */
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+.stats {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.stats strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Empty State */
+.no-applications {
+    text-align: center;
+    color: #95a5a6;
+    font-style: italic;
+    padding: 40px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 2px dashed #dee2e6;
+}
+
+.no-applications p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+/* Applications Grid */
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+/* Application Card */
+.application-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 24px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.application-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    border-color: #3498db;
+}
+
+/* Protocol Badge */
+.protocol-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.protocol-http {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.protocol-https {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+}
+
+.protocol-ftp {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    color: white;
+}
+
+.protocol-tcp {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+}
+
+.protocol-udp {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+/* Application Details */
+.application-url {
+    font-size: 16px;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    word-break: break-all;
+    font-weight: 500;
+}
+
+.application-port {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.application-port::before {
+    content: "🔌";
+    font-size: 16px;
+}
+
+.application-port strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Full Address */
+.full-address {
+    background-color: #ecf0f1;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: 'Courier New', Consolas, Monaco, monospace;
+    font-size: 13px;
+    color: #2c3e50;
+    word-break: break-all;
+    border-left: 4px solid #3498db;
+    transition: all 0.3s ease;
+}
+
+.full-address:hover {
+    background-color: #e8f4f8;
+    border-left-color: #2980b9;
+}
+
+.full-address a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.full-address a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.full-address a::after {
+    content: " 🔗";
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* Pagination */
+.pagination {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 10px 16px;
+    margin: 0 4px;
+    border: 1px solid #ddd;
+    color: #3498db;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    min-width: 44px;
+    text-align: center;
+}
+
+.pagination a:hover {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.pagination .current {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.pagination .disabled {
+    color: #bdc3c7;
+    border-color: #ecf0f1;
+    cursor: not-allowed;
+}
+
+.pagination .disabled:hover {
+    background-color: transparent;
+    color: #bdc3c7;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #7f8c8d;
+}
+
+.loading::before {
+    content: "⚡";
+    font-size: 24px;
+    display: block;
+    margin-bottom: 16px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .applications-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .application-card {
+        padding: 20px;
+    }
+    
+    .pagination a,
+    .pagination span {
+        padding: 8px 12px;
+        margin: 0 2px;
+        min-width: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .application-card {
+        padding: 16px;
+    }
+    
+    .full-address {
+        font-size: 12px;
+        padding: 10px 12px;
+    }
+    
+    .pagination {
+        margin-top: 30px;
+    }
+    
+    .pagination a,
+    .pagination span {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background-color: white;
+        color: black;
+    }
+    
+    .container {
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .application-card {
+        border: 1px solid #ccc;
+        box-shadow: none;
+        break-inside: avoid;
+        margin-bottom: 20px;
+    }
+    
+    .pagination {
+        display: none;
+    }
+    
+    .full-address a::after {
+        display: none;
+    }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Styles for Better Accessibility */
+.full-address a:focus,
+.pagination a:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .application-card {
+        border-width: 2px;
+    }
+    
+    .protocol-badge {
+        border: 1px solid currentColor;
+    }
+}

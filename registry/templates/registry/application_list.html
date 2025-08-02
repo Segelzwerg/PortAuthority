@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Authority - Applications</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'registry/css/styles.css' %}">
+    <link rel="icon" type="image/x-icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔌</text></svg>">
+</head>
+<body>
+<div class="container">
+    <h1>Port Authority - Application Registry</h1>
+
+    <div class="stats">
+        Total Applications: <strong>{{ total_applications }}</strong>
+    </div>
+
+    {% if applications %}
+        <div class="applications-grid">
+            {% for app in applications %}
+                <div class="application-card">
+                    <div class="protocol-badge protocol-{{ app.protocol }}">
+                        {{ app.get_protocol_display }}
+                    </div>
+
+                    <div class="application-url">
+                        {{ app.url }}
+                    </div>
+
+                    <div class="application-port">
+                        Port: <strong>{{ app.port }}</strong>
+                    </div>
+
+                    <div class="full-address">
+                        {% if app.protocol == 'http' or app.protocol == 'https' %}
+                            <a href="{{ app.full_address }}" target="_blank" rel="noopener noreferrer">
+                                {{ app.full_address }}
+                            </a>
+                        {% else %}
+                            {{ app.full_address }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination for class-based view -->
+        {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" aria-label="Go to first page">« First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" aria-label="Go to previous page">‹ Previous</a>
+                {% endif %}
+
+                <span class="current" aria-current="page">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" aria-label="Go to next page">Next ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" aria-label="Go to last page">Last »</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div class="no-applications">
+            <p>No applications registered yet.</p>
+            <p>Add some applications to see them listed here.</p>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>
