@@ -83,7 +83,18 @@ h1 {
 .application-card:hover {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
-    border-color: #3498db;
+    border-color: #2980b9;
+}
+
+.application-card:focus {
+    outline: 2px solid #2980b9;
+    outline-offset: 2px;
+    border-color: #2980b9;
+}
+
+.application-card:focus-visible {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
 }
 
 /* Protocol Badge */
@@ -100,7 +111,7 @@ h1 {
 }
 
 .protocol-http {
-    background: linear-gradient(135deg, #3498db, #2980b9);
+    background: linear-gradient(135deg, #2980b9, #1f618d);
     color: white;
 }
 
@@ -161,24 +172,25 @@ h1 {
     font-size: 13px;
     color: #2c3e50;
     word-break: break-all;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid #2980b9;
     transition: all 0.3s ease;
+    margin-bottom: 16px;
 }
 
 .full-address:hover {
     background-color: #e8f4f8;
-    border-left-color: #2980b9;
+    border-left-color: #1f618d;
 }
 
 .full-address a {
-    color: #3498db;
+    color: #1f618d;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .full-address a:hover {
-    color: #2980b9;
+    color: #154360;
     text-decoration: underline;
 }
 
@@ -186,6 +198,136 @@ h1 {
     content: " 🔗";
     font-size: 12px;
     opacity: 0.7;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-height: 40px;
+    font-family: inherit;
+}
+
+.btn:focus {
+    outline: 2px solid #2980b9;
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2980b9, #1f618d);
+    color: white;
+    box-shadow: 0 2px 4px rgba(41, 128, 185, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1f618d, #154360);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(41, 128, 185, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(41, 128, 185, 0.3);
+}
+
+.btn-secondary {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    border: 1px solid #bdc3c7;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: #d5dbdb;
+    border-color: #95a5a6;
+    transform: translateY(-1px);
+}
+
+.btn-disabled {
+    background-color: #ecf0f1;
+    color: #95a5a6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-disabled:hover {
+    transform: none;
+    background-color: #ecf0f1;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn:disabled:hover {
+    transform: none;
+}
+
+/* Button Icons */
+.btn-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* Notifications */
+.pa-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 1000;
+    max-width: 320px;
+    word-wrap: break-word;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+    cursor: pointer;
+}
+
+.pa-notification.show {
+    transform: translateX(0);
+}
+
+.pa-notification:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Notification Types */
+.pa-notification.success {
+    background-color: #27ae60;
+}
+
+.pa-notification.warning {
+    background-color: #f39c12;
+}
+
+.pa-notification.error {
+    background-color: #e74c3c;
+}
+
+.pa-notification.info {
+    background-color: #2980b9;
 }
 
 /* Pagination */
@@ -202,7 +344,7 @@ h1 {
     padding: 10px 16px;
     margin: 0 4px;
     border: 1px solid #ddd;
-    color: #3498db;
+    color: #2980b9;
     text-decoration: none;
     border-radius: 6px;
     font-weight: 500;
@@ -212,18 +354,18 @@ h1 {
 }
 
 .pagination a:hover {
-    background-color: #3498db;
+    background-color: #2980b9;
     color: white;
-    border-color: #3498db;
+    border-color: #2980b9;
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+    box-shadow: 0 2px 8px rgba(41, 128, 185, 0.3);
 }
 
 .pagination .current {
-    background-color: #3498db;
+    background-color: #2980b9;
     color: white;
-    border-color: #3498db;
-    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+    border-color: #2980b9;
+    box-shadow: 0 2px 8px rgba(41, 128, 185, 0.3);
 }
 
 .pagination .disabled {
@@ -254,9 +396,84 @@ h1 {
     animation: pulse 2s infinite;
 }
 
+/* Animations */
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card animations */
+.application-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.application-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.application-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.application-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.application-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.application-card:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+/* Loading button state */
+.btn.loading {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.btn.loading .btn-icon {
+    animation: pulse 1s infinite;
 }
 
 /* Responsive Design */
@@ -265,35 +482,65 @@ h1 {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 20px;
     }
+
+    .pa-notification {
+        max-width: 280px;
+        right: 10px;
+        left: 10px;
+        right: auto;
+        margin: 0 auto;
+    }
 }
 
 @media (max-width: 768px) {
     body {
         padding: 10px;
     }
-    
+
     .container {
         padding: 20px;
     }
-    
+
     h1 {
         font-size: 2rem;
     }
-    
+
     .applications-grid {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-    
+
     .application-card {
         padding: 20px;
     }
-    
+
+    .action-buttons {
+        justify-content: center;
+    }
+
+    .btn {
+        flex: 1;
+        justify-content: center;
+        min-width: 120px;
+    }
+
     .pagination a,
     .pagination span {
         padding: 8px 12px;
         margin: 0 2px;
         min-width: 36px;
+    }
+
+    .pa-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100%);
+    }
+
+    .pa-notification.show {
+        transform: translateY(0);
     }
 }
 
@@ -301,24 +548,34 @@ h1 {
     .container {
         padding: 15px;
     }
-    
+
     h1 {
         font-size: 1.8rem;
     }
-    
+
     .application-card {
         padding: 16px;
     }
-    
+
     .full-address {
         font-size: 12px;
         padding: 10px 12px;
     }
-    
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+        min-height: 36px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
     .pagination {
         margin-top: 30px;
     }
-    
+
     .pagination a,
     .pagination span {
         padding: 6px 10px;
@@ -332,23 +589,31 @@ h1 {
         background-color: white;
         color: black;
     }
-    
+
     .container {
         box-shadow: none;
         padding: 0;
     }
-    
+
     .application-card {
         border: 1px solid #ccc;
         box-shadow: none;
         break-inside: avoid;
         margin-bottom: 20px;
     }
-    
+
     .pagination {
         display: none;
     }
-    
+
+    .action-buttons {
+        display: none;
+    }
+
+    .pa-notification {
+        display: none;
+    }
+
     .full-address a::after {
         display: none;
     }
@@ -361,12 +626,16 @@ h1 {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+
+    .application-card {
+        animation: none;
+    }
 }
 
 /* Focus Styles for Better Accessibility */
 .full-address a:focus,
 .pagination a:focus {
-    outline: 2px solid #3498db;
+    outline: 2px solid #2980b9;
     outline-offset: 2px;
 }
 
@@ -375,8 +644,46 @@ h1 {
     .application-card {
         border-width: 2px;
     }
-    
+
     .protocol-badge {
         border: 1px solid currentColor;
     }
+
+    .btn {
+        border: 2px solid currentColor;
+    }
+
+    .pa-notification {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Selection styles */
+::selection {
+    background-color: #2980b9;
+    color: white;
+}
+
+::-moz-selection {
+    background-color: #2980b9;
+    color: white;
 }
