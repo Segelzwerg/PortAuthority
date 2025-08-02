@@ -1,0 +1,16 @@
+[project]
+name = "portauthority"
+version = "0.0.1"
+description = "Can't you remember the custom ports of your app? Setup a manager registering your applications for one-click access."
+authors = [
+    {name = "Segelzwerg",email = "25705862+Segelzwerg@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
