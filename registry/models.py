@@ -1,3 +1,5 @@
+import re
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Model
@@ -56,7 +58,19 @@ class Application(models.Model):
     @property
     def full_address(self):
         """Combines protocol, url and port into a full address string."""
-        return f"{self.protocol}://{self.url}:{self.port}"
+        # Remove protocol from URL if it already exists
+        clean_url = self.url
+
+        # Check if URL already contains any protocol (not just http/https)
+        protocol_pattern = r'^[a-zA-Z][a-zA-Z0-9+.-]*://'
+        if re.match(protocol_pattern, clean_url):
+            # Remove the existing protocol
+            clean_url = re.sub(protocol_pattern, '', clean_url)
+
+        # Remove any trailing slashes
+        clean_url = clean_url.rstrip('/')
+
+        return f"{self.protocol}://{clean_url}:{self.port}"
 
     def __str__(self):
         return self.full_address

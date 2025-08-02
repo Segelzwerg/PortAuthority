@@ -27,29 +27,71 @@ class ApplicationModelTest(TestCase):
     def test_application_str_method(self):
         """Test that __str__ method returns the full address."""
         app = Application.objects.create(**self.valid_application_data)
-        expected_str = 'https://https://example.com:443'
+        expected_str = 'https://example.com:443'
 
         self.assertEqual(str(app), expected_str)
 
     def test_full_address_property(self):
         """Test the full_address property returns correct format."""
         app = Application.objects.create(**self.valid_application_data)
-        expected_address = 'https://https://example.com:443'
+        expected_address = 'https://example.com:443'
 
         self.assertEqual(app.full_address, expected_address)
 
     def test_full_address_property_with_different_protocols(self):
         """Test full_address property with different protocol types."""
         test_cases = [
-            ('http', 'http://localhost', 80, 'http://http://localhost:80'),
-            ('https', 'https://secure.com', 443, 'https://https://secure.com:443'),
-            ('ftp', 'ftp://files.com', 21, 'ftp://ftp://files.com:21'),
-            ('tcp', 'tcp://service.com', 8080, 'tcp://tcp://service.com:8080'),
-            ('udp', 'udp://stream.com', 9090, 'udp://udp://stream.com:9090'),
+            ('http', 'http://localhost', 80, 'http://localhost:80'),
+            ('https', 'https://secure.com', 443, 'https://secure.com:443'),
+            ('ftp', 'ftp://files.com', 21, 'ftp://files.com:21'),
+            ('tcp', 'tcp://service.com', 8080, 'tcp://service.com:8080'),
+            ('udp', 'udp://stream.com', 9090, 'udp://stream.com:9090'),
         ]
 
         for protocol, url, port, expected in test_cases:
             with self.subTest(protocol=protocol):
+                app = Application(protocol=protocol, url=url, port=port)
+                self.assertEqual(app.full_address, expected)
+
+    def test_full_address_property_without_protocol_in_url(self):
+        """Test full_address property when URL doesn't contain protocol."""
+        test_cases = [
+            ('http', 'localhost', 80, 'http://localhost:80'),
+            ('https', 'secure.com', 443, 'https://secure.com:443'),
+            ('ftp', 'files.com', 21, 'ftp://files.com:21'),
+            ('tcp', 'service.com', 8080, 'tcp://service.com:8080'),
+            ('udp', 'stream.com', 9090, 'udp://stream.com:9090'),
+        ]
+
+        for protocol, url, port, expected in test_cases:
+            with self.subTest(protocol=protocol):
+                app = Application(protocol=protocol, url=url, port=port)
+                self.assertEqual(app.full_address, expected)
+
+    def test_full_address_removes_duplicate_protocol(self):
+        """Test that full_address removes duplicate protocols from URL."""
+        # Test cases where URL already contains a protocol
+        test_cases = [
+            ('https', 'http://example.com', 443, 'https://example.com:443'),
+            ('http', 'https://secure.com', 80, 'http://secure.com:80'),
+            ('https', 'https://same-protocol.com', 443, 'https://same-protocol.com:443'),
+        ]
+
+        for protocol, url, port, expected in test_cases:
+            with self.subTest(protocol=protocol, url=url):
+                app = Application(protocol=protocol, url=url, port=port)
+                self.assertEqual(app.full_address, expected)
+
+    def test_full_address_removes_trailing_slashes(self):
+        """Test that full_address removes trailing slashes from URL."""
+        test_cases = [
+            ('http', 'example.com/', 80, 'http://example.com:80'),
+            ('https', 'https://secure.com/', 443, 'https://secure.com:443'),
+            ('http', 'http://localhost/', 8080, 'http://localhost:8080'),
+        ]
+
+        for protocol, url, port, expected in test_cases:
+            with self.subTest(protocol=protocol, url=url):
                 app = Application(protocol=protocol, url=url, port=port)
                 self.assertEqual(app.full_address, expected)
 
