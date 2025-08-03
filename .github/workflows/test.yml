@@ -68,7 +68,7 @@ jobs:
           path: |
             coverage.xml
             htmlcov/
-          retention-days: 3
+          retention-days: 30
 
   security-scan:
     runs-on: ubuntu-latest
