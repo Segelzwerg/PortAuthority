@@ -59,7 +59,9 @@ exclude = [
     "dist",
     "migrations",
     "*/migrations/*",
-    "node_modules"
+    "node_modules",
+    "site-packages",
+    "*/site-packages/*"
 ]
 ignore = [
     "E203", # whitespace before ':'
