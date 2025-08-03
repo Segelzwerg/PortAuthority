@@ -43,7 +43,7 @@ jobs:
 
       - name: Lint with Flake8
         run: |
-          poetry run flake8 portauthority, registry --show-source --statistics
+          poetry run flake8 portauthority registry --show-source --statistics
 
       - name: Run Django system checks
         run: |
