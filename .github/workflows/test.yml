@@ -68,20 +68,7 @@ jobs:
           path: |
             coverage.xml
             htmlcov/
-          retention-days: 30
-
-      - name: Generate coverage badge
-        if: github.ref == 'refs/heads/main'
-        run: |
-          poetry run coverage-badge -o coverage.svg
-
-      - name: Upload coverage badge
-        if: github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-badge-${{ github.run_id }}
-          path: coverage.svg
-          retention-days: 90
+          retention-days: 3
 
   security-scan:
     runs-on: ubuntu-latest
