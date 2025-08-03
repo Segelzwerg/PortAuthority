@@ -23,6 +23,7 @@ bandit = "^1.8.6"
 coverage = "^7.10.1"
 pytest-cov = "^6.2.1"
 pytest-django = "^4.11.1"
+safety = "^3.6.0"
 
 [tool.black]
 line-length = 88
