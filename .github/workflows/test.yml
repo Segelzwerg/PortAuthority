@@ -190,6 +190,9 @@ jobs:
             Run `poetry run coverage html` locally to generate detailed HTML coverage reports.
 
   docker-build:
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME_GHCR: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}
     runs-on: ubuntu-latest
     needs: [ lint-and-test, security-scan ]
     if: github.ref == 'refs/heads/main'
