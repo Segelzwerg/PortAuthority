@@ -50,6 +50,8 @@ jobs:
           poetry run python manage.py check --deploy
 
       - name: Run migrations check
+        env:
+          ALLOWED_HOST: 0.0.0.0
         run: |
           poetry run python manage.py makemigrations --check --dry-run
 
