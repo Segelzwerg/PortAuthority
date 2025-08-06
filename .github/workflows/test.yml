@@ -56,6 +56,7 @@ jobs:
       - name: Run tests with coverage
         env:
           DJANGO_SETTINGS_MODULE: portauthority.settings
+          ALLOWED_HOST:"0.0.0.0"
         run: |
           poetry run coverage run --source='.' manage.py test
           poetry run coverage report --show-missing
