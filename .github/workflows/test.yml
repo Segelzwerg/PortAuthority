@@ -9,6 +9,9 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
+    env:
+      DJANGO_SETTINGS_MODULE: portauthority.settings
+      ALLOWED_HOST: 0.0.0.0
 
     steps:
       - name: Checkout code
@@ -50,15 +53,10 @@ jobs:
           poetry run python manage.py check --deploy
 
       - name: Run migrations check
-        env:
-          ALLOWED_HOST: 0.0.0.0
         run: |
           poetry run python manage.py makemigrations --check --dry-run
 
       - name: Run tests with coverage
-        env:
-          DJANGO_SETTINGS_MODULE: portauthority.settings
-          ALLOWED_HOST: 0.0.0.0
         run: |
           poetry run coverage run --source='.' manage.py test
           poetry run coverage report --show-missing
